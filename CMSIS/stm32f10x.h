@@ -60,9 +60,9 @@
 #define USE_STDPERIPH_DRIVER    //me
 
 
-    #if !defined (STM32F10X_MD)
-        #define STM32F10X_MD
-    #endif												//me
+#if !defined (STM32F10X_MD)
+	#define STM32F10X_MD
+#endif												//me
 	 
 /** @addtogroup Library_configuration_section
   * @{

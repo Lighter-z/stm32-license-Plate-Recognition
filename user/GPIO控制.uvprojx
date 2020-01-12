@@ -48,14 +48,14 @@
             <NotGenerated>0</NotGenerated>
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
-          <OutputDirectory>.\</OutputDirectory>
+          <OutputDirectory>.\DebugConfig\</OutputDirectory>
           <OutputName>GPIO控制</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
-          <ListingPath>.\</ListingPath>
+          <ListingPath>.\DebugConfig\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
           <CreateBatchFile>0</CreateBatchFile>
@@ -137,7 +137,7 @@
             <DriverSelection>4099</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
-          <Flash2>Segger\JL2CM3.dll</Flash2>
+          <Flash2>BIN\UL2CM3.DLL</Flash2>
           <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CMSIS;..\Library\inc;..\Utilities\inc;..\ESP8266;..\Common;..\Algorithm\inc</IncludePath>
+              <IncludePath>..\CMSIS;..\Library\inc;..\Common;..\Algorithm\inc;..\Device\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -395,7 +395,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Utilities</GroupName>
+          <GroupName>Device</GroupName>
           <Files>
             <File>
               <FileName>stm32f10x_it.c</FileName>
@@ -403,44 +403,39 @@
               <FilePath>..\Library\src\stm32f10x_it.c</FilePath>
             </File>
             <File>
-              <FileName>lcd.c</FileName>
+              <FileName>debug.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Utilities\src\lcd.c</FilePath>
+              <FilePath>..\Device\src\debug.c</FilePath>
             </File>
             <File>
               <FileName>delay.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Utilities\src\delay.c</FilePath>
-            </File>
-            <File>
-              <FileName>debug.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Utilities\src\debug.c</FilePath>
-            </File>
-            <File>
-              <FileName>led.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Utilities\src\led.c</FilePath>
-            </File>
-            <File>
-              <FileName>usart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Utilities\src\usart.c</FilePath>
+              <FilePath>..\Device\src\delay.c</FilePath>
             </File>
             <File>
               <FileName>key.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\key.c</FilePath>
+              <FilePath>..\Device\src\key.c</FilePath>
+            </File>
+            <File>
+              <FileName>lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Device\src\lcd.c</FilePath>
             </File>
             <File>
               <FileName>ov7670.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Utilities\src\ov7670.c</FilePath>
+              <FilePath>..\Device\src\ov7670.c</FilePath>
             </File>
             <File>
-              <FileName>string.c</FileName>
+              <FileName>rcc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Utilities\src\string.c</FilePath>
+              <FilePath>..\Device\src\rcc.c</FilePath>
+            </File>
+            <File>
+              <FileName>usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Device\src\usart.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -510,16 +505,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>ESP8266</GroupName>
-          <Files>
-            <File>
-              <FileName>bsp_esp8266.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\ESP8266\bsp_esp8266.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>Common</GroupName>
           <Files>
             <File>
@@ -527,20 +512,35 @@
               <FileType>1</FileType>
               <FilePath>..\Common\Common.c</FilePath>
             </File>
+            <File>
+              <FileName>value.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Common\value.c</FilePath>
+            </File>
+            <File>
+              <FileName>string.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Common\string.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>Algorithm</GroupName>
           <Files>
             <File>
-              <FileName>discern.c</FileName>
+              <FileName>algorithm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Algorithm\src\discern.c</FilePath>
+              <FilePath>..\Algorithm\src\algorithm.c</FilePath>
             </File>
             <File>
               <FileName>ShowChar.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Algorithm\src\ShowChar.c</FilePath>
+            </File>
+            <File>
+              <FileName>discern.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Algorithm\src\discern.c</FilePath>
             </File>
           </Files>
         </Group>

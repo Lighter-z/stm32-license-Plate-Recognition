@@ -1,6 +1,6 @@
 #include "stm32f10x.h"
 #include "board.h"
-#include "ov7670.h"
+#include "ov7670.h" 
 
 #define OV7670_REG_NUM  184
 
@@ -8,7 +8,7 @@
 
 void OV7670_Gpio_Init()
 {
-    GPIO_InitTypeDef gpio_init_struct;//结构体
+  GPIO_InitTypeDef gpio_init_struct;//结构体
 		
 	RCC_APB2PeriphClockCmd(FIFO_WR_RCC, ENABLE);//初始化时钟
 	RCC_APB2PeriphClockCmd(FIFO_RRST_RCC, ENABLE);//初始化时钟
@@ -55,22 +55,22 @@ void OV7670_Gpio_Init()
 }
 void SCCB_SID_change_in()//引脚切换为输入
 {
-    GPIO_InitTypeDef gpio_init_struct;//结构体
+	GPIO_InitTypeDef gpio_init_struct;//结构体
 
-    gpio_init_struct.GPIO_Mode = GPIO_Mode_IPU;//输入上拉
-    gpio_init_struct.GPIO_Speed = GPIO_Speed_50MHz;
-	
+	gpio_init_struct.GPIO_Mode = GPIO_Mode_IPU;//输入上拉
+	gpio_init_struct.GPIO_Speed = GPIO_Speed_50MHz;
+
 	gpio_init_struct.GPIO_Pin = SCCB_SID_PIN;
-    GPIO_Init(SCCB_SID_PORT, &gpio_init_struct);
+	GPIO_Init(SCCB_SID_PORT, &gpio_init_struct);
 }
 void SCCB_SID_change_out()//引脚切换为输出
 {
-    GPIO_InitTypeDef gpio_init_struct;//结构体
-		
-    gpio_init_struct.GPIO_Mode = GPIO_Mode_Out_PP;//推挽输出
-    gpio_init_struct.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitTypeDef gpio_init_struct;//结构体
+	
+	gpio_init_struct.GPIO_Mode = GPIO_Mode_Out_PP;//推挽输出
+	gpio_init_struct.GPIO_Speed = GPIO_Speed_50MHz;
 	gpio_init_struct.GPIO_Pin = SCCB_SID_PIN;
-    GPIO_Init(SCCB_SID_PORT, &gpio_init_struct);
+	GPIO_Init(SCCB_SID_PORT, &gpio_init_struct);
 }
 void FIFO_Reset_Read_Addr(void)//FIFO 读数据复位，通过直接操作寄存器来提高速度
 {				

@@ -5,7 +5,7 @@
 #include "stm32f10x.h"
 #include "lcd.h"
 	 
-void Lcd_Gpio_Init(void);
+void LCD_GPIO_Init(void);
 void LCD_Writ_Bus(u16 bus_data);
 void LCD_Write_COM(u16 bus_data);
 void LCD_Write_DATA(u16 bus_data);

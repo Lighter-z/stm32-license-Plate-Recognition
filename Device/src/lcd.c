@@ -4,40 +4,40 @@
 // #include "image.h"
 #include "board.h"
 #include "font.h"
-void Lcd_Gpio_Init(void)
+void LCD_GPIO_Init(void)
 {
-    GPIO_InitTypeDef gpio_init_struct;
-		//初始化时钟
-    RCC_APB2PeriphClockCmd(LCD_CS_RCC | LCD_RD_RCC | LCD_WR_RCC | LCD_RS_RCC | LCD_REST_RCC |
-                            LCD_DATA_RCC | RCC_APB2Periph_AFIO, ENABLE);
-    /* 配置 JLINK 为 SW 模式 */
-		GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);//PB3 and PB4 --> gpio function ok
+	GPIO_InitTypeDef gpio_init_struct;
+	//初始化时钟
+	RCC_APB2PeriphClockCmd(LCD_CS_RCC | LCD_RD_RCC | LCD_WR_RCC | LCD_RS_RCC | LCD_REST_RCC |
+													LCD_DATA_RCC | RCC_APB2Periph_AFIO, ENABLE);
+	/* 配置 JLINK 为 SW 模式 */
+	GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);//PB3 and PB4 --> gpio function ok
+
+	/* 配置 CS 为推挽输出 */       
+	gpio_init_struct.GPIO_Mode = GPIO_Mode_Out_PP;//GPIO_Mode_AF_PP
+	gpio_init_struct.GPIO_Speed = GPIO_Speed_50MHz;
+	gpio_init_struct.GPIO_Pin = LCD_CS_PIN;
+	GPIO_Init(LCD_CS_PORT, &gpio_init_struct);
 	
-    /* 配置 CS 为推挽输出 */       
-    gpio_init_struct.GPIO_Mode = GPIO_Mode_Out_PP;//GPIO_Mode_AF_PP
-    gpio_init_struct.GPIO_Speed = GPIO_Speed_50MHz;
-    gpio_init_struct.GPIO_Pin = LCD_CS_PIN;
-    GPIO_Init(LCD_CS_PORT, &gpio_init_struct);
-    
-    /* 配置 RD 为推挽输出 *///
-    gpio_init_struct.GPIO_Pin = LCD_RD_PIN;
-    GPIO_Init(LCD_RD_PORT, &gpio_init_struct);
+	/* 配置 RD 为推挽输出 *///
+	gpio_init_struct.GPIO_Pin = LCD_RD_PIN;
+	GPIO_Init(LCD_RD_PORT, &gpio_init_struct);
 
-    /* 配置 WR 为推挽输出 */
-    gpio_init_struct.GPIO_Pin = LCD_WR_PIN;
-    GPIO_Init(LCD_WR_PORT, &gpio_init_struct);
+	/* 配置 WR 为推挽输出 */
+	gpio_init_struct.GPIO_Pin = LCD_WR_PIN;
+	GPIO_Init(LCD_WR_PORT, &gpio_init_struct);
 
-    /* 配置 RS 为推挽输出 */
-    gpio_init_struct.GPIO_Pin = LCD_RS_PIN;
-    GPIO_Init(LCD_RS_PORT, &gpio_init_struct);
- 
-    /* 配置 REST 为推挽输出 */
-    gpio_init_struct.GPIO_Pin = LCD_REST_PIN;
-    GPIO_Init(LCD_REST_PORT, &gpio_init_struct);
-		
-    /* 配置 LCD DATA 为推挽输出 */
-    gpio_init_struct.GPIO_Pin = LCD_DATA_PIN;
-    GPIO_Init(LCD_DATA_PORT, &gpio_init_struct);
+	/* 配置 RS 为推挽输出 */
+	gpio_init_struct.GPIO_Pin = LCD_RS_PIN;
+	GPIO_Init(LCD_RS_PORT, &gpio_init_struct);
+
+	/* 配置 REST 为推挽输出 */
+	gpio_init_struct.GPIO_Pin = LCD_REST_PIN;
+	GPIO_Init(LCD_REST_PORT, &gpio_init_struct);
+	
+	/* 配置 LCD DATA 为推挽输出 */
+	gpio_init_struct.GPIO_Pin = LCD_DATA_PIN;
+	GPIO_Init(LCD_DATA_PORT, &gpio_init_struct);
 		
 	GPIO_WriteBit(LCD_RD_PORT, LCD_RD_PIN,1);
 	GPIO_WriteBit(LCD_WR_PORT, LCD_WR_PIN,1);
