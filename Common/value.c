@@ -31,7 +31,7 @@ vu16 character_boundary_right_6 = 0,character_boundary_left_6 = 0;
 vu16 character_boundary_right_7 = 0,character_boundary_left_7 = 0;
 vu16 character_boundary_right_8 = 0,character_boundary_left_8 = 0;
 
-vu8 R_a=0,G_a=0,B_a=0;//阈值
+vu8 Red_Vlaue = 0, Green_Value = 0 ,Blue_Value = 0;//阈值
 
 vu8 table_picture[150];//定义保存图片的数组
 vu8 table_char[36]={0,1,2,3,4,5,6,7,8,9,'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',};

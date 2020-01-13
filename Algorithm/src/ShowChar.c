@@ -6,7 +6,7 @@
 
 TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
 
-vu8 tim3_num = 0;//TIM3分钟计时
+vu8 tim3_num = 0;                                                     //TIM3分钟计时
 
 void Data_LCD_Display(void) {																					//常规显示
 	vu16 a = 0,b = 0;

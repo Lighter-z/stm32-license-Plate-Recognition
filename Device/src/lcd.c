@@ -1,10 +1,11 @@
 #include "stm32f10x.h"
 #include "lcd.h"
-#include "delay.h"
-// #include "image.h"
+#include "delay.h" 
 #include "board.h"
 #include "font.h"
-void LCD_GPIO_Init(void)
+
+
+static void LCD_GPIO_Init(void)
 {
 	GPIO_InitTypeDef gpio_init_struct;
 	//初始化时钟
@@ -44,24 +45,25 @@ void LCD_GPIO_Init(void)
 	GPIO_WriteBit(LCD_RS_PORT, LCD_RS_PIN,1);
 	GPIO_WriteBit(LCD_CS_PORT, LCD_CS_PIN,0);//片选，拉低有效
 }
-void LCD_Writ_Bus(unsigned short bus_data)//16位
+static void LCD_Writ_Bus(unsigned short bus_data)//16位
 {
 	LCD_DATA_PORT->ODR = bus_data;
 	GPIO_WriteBit(LCD_WR_PORT, LCD_WR_PIN,0);
 	GPIO_WriteBit(LCD_WR_PORT, LCD_WR_PIN,1);
 }
-void LCD_Write_COM(u16 bus_data)	
+static void LCD_Write_COM(u16 bus_data)	
 {	
 	GPIO_WriteBit(LCD_RS_PORT, LCD_RS_PIN,0);
 	LCD_Writ_Bus(bus_data);
 }
-void LCD_Write_DATA(u16 bus_data)	
+static void LCD_Write_DATA(u16 bus_data)	
 {
 	GPIO_WriteBit(LCD_RS_PORT, LCD_RS_PIN,1);
 	LCD_Writ_Bus(bus_data);
 }
 void LCD_Init(void)
 {
+	LCD_GPIO_Init();
 	GPIO_WriteBit(LCD_REST_PORT, LCD_REST_PIN,1);//需要一定的延时，保证初始化进行
   delayms(10);	
 	GPIO_WriteBit(LCD_REST_PORT, LCD_REST_PIN,0);

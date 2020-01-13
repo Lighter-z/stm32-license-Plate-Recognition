@@ -32,7 +32,7 @@ extern vu16 character_boundary_right_6,character_boundary_left_6;
 extern vu16 character_boundary_right_7,character_boundary_left_7;
 extern vu16 character_boundary_right_8,character_boundary_left_8;
 
-extern vu8 R_a,G_a,B_a;//阈值
+extern vu8 Red_Vlaue, Green_Value ,Blue_Value;//阈值
 
 extern vu8 table_picture[150];//定义保存图片的数组
 extern vu8 table_char[36];

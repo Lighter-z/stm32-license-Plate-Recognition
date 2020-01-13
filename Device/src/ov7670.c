@@ -6,7 +6,7 @@
 
 #define DELAYTIME 2//9倍频时延时“1”，16倍频时延时“2”
 
-void OV7670_Gpio_Init()
+void OV7670_GPIO_Init(void)
 {
   GPIO_InitTypeDef gpio_init_struct;//结构体
 		
@@ -52,8 +52,10 @@ void OV7670_Gpio_Init()
 	
 	gpio_init_struct.GPIO_Pin = OV7670_DATA_PIN;//OV7670数据口引脚初始化
 	GPIO_Init(OV7670_DATA_PORT, &gpio_init_struct);
+	
+	GPIO_WriteBit(FIFO_OE_PORT, FIFO_OE_PIN, 0);
 }
-void SCCB_SID_change_in()//引脚切换为输入
+static void Sccb_Sid_Change_In(void)//引脚切换为输入
 {
 	GPIO_InitTypeDef gpio_init_struct;//结构体
 
@@ -63,7 +65,7 @@ void SCCB_SID_change_in()//引脚切换为输入
 	gpio_init_struct.GPIO_Pin = SCCB_SID_PIN;
 	GPIO_Init(SCCB_SID_PORT, &gpio_init_struct);
 }
-void SCCB_SID_change_out()//引脚切换为输出
+static void Sccb_Sid_Change_Out(void)//引脚切换为输出
 {
 	GPIO_InitTypeDef gpio_init_struct;//结构体
 	
@@ -81,7 +83,7 @@ void FIFO_Reset_Read_Addr(void)//FIFO 读数据复位，通过直接操作寄存器来提高速度
 	GPIOC->BSRR =1<<2;	//  RRST=1
 	GPIOC->BSRR =1<<4;	//	RCLK=1
 }
-void startSCCB()//SCCB设置，类似I2C
+static void Start_Sccb(void)//SCCB设置，类似I2C
 {
 	GPIO_WriteBit(SCCB_SID_PORT, SCCB_SID_PIN, 1);
 	delay(DELAYTIME);
@@ -93,7 +95,7 @@ void startSCCB()//SCCB设置，类似I2C
 	delay(DELAYTIME);
 }
 
-void stopSCCB()//stop命令,SCCB的停止信号
+static void Stop_Sccb(void)//stop命令,SCCB的停止信号
 {
 	GPIO_WriteBit(SCCB_SID_PORT, SCCB_SID_PIN, 0);
 	delay(DELAYTIME);
@@ -102,7 +104,7 @@ void stopSCCB()//stop命令,SCCB的停止信号
 	GPIO_WriteBit(SCCB_SID_PORT, SCCB_SID_PIN, 1);
 	delay(DELAYTIME);  
 }
-void noAck(void)//noAck,用于连续读取中的最后一个结束周期
+static void No_Ack(void)//noAck,用于连续读取中的最后一个结束周期
 {
 	GPIO_WriteBit(SCCB_SID_PORT, SCCB_SID_PIN, 1);
 	delay(DELAYTIME);
@@ -113,11 +115,11 @@ void noAck(void)//noAck,用于连续读取中的最后一个结束周期
 	GPIO_WriteBit(SCCB_SID_PORT, SCCB_SID_PIN, 0);
 	delay(DELAYTIME);
 }
-u8 getAck() 
+static u8 Get_Ack(void) 
 {
 	u8 Error;
 
-	SCCB_SID_change_in();																			
+	Sccb_Sid_Change_In();																			
 	GPIO_WriteBit(SCCB_SID_PORT, SCCB_SID_PIN, 1);
 	delay(DELAYTIME);
 
@@ -130,13 +132,13 @@ u8 getAck()
 	GPIO_WriteBit(SCCB_SIC_PORT, SCCB_SIC_PIN, 0);
 	delay(DELAYTIME);
 
-	SCCB_SID_change_out();//输出
+	Sccb_Sid_Change_Out();//输出
 	GPIO_WriteBit(SCCB_SID_PORT, SCCB_SID_PIN, 0);
 
 	return !Error;
 }
 
-u8 SCCBwriteByte(u8 dat)//写入一个字节的数据到SCCB
+static u8 Sccb_Write_Byte(u8 dat)//写入一个字节的数据到SCCB
 {
 	u8 i;
 	for(i=0;i<8;i++)
@@ -152,13 +154,13 @@ u8 SCCBwriteByte(u8 dat)//写入一个字节的数据到SCCB
 	}
 	GPIO_WriteBit(SCCB_SID_PORT, SCCB_SID_PIN, 0);
 
-	return getAck();
+	return Get_Ack();
 }
-u8 SCCBreadByte(void)//一个字节数据读取并且返回
+static u8 Sccb_Read_Byte(void)//一个字节数据读取并且返回
 {
 	u8 i,rbyte=0;
 
-	SCCB_SID_change_in();
+	Sccb_Sid_Change_In();
 	for(i=0;i<8;i++)
 	{
 		GPIO_WriteBit(SCCB_SIC_PORT, SCCB_SIC_PIN, 1);
@@ -171,7 +173,7 @@ u8 SCCBreadByte(void)//一个字节数据读取并且返回
 		delay(DELAYTIME);
 	} 
 
-	SCCB_SID_change_out();//输出
+	Sccb_Sid_Change_Out();//输出
 	GPIO_WriteBit(SCCB_SID_PORT, SCCB_SID_PIN, 0);
 	return rbyte;
 }
@@ -495,81 +497,81 @@ uc8 OV7670_reg[OV7670_REG_NUM][2]=//OV7670 传感器寄存器、初始化相关设置
 {0x09, 0x00}, 
 };
 
-u8 wr_Sensor_Reg(u8 regID, u8 regDat)//写OV7670寄存器
+static u8 Write_Sensor_Reg(u8 regID, u8 regDat)//写OV7670寄存器
 {
-		startSCCB(); //发送SCCB 总线开始传输命令
-		if(0==SCCBwriteByte(0x42))//写地址
+		Start_Sccb(); //发送SCCB 总线开始传输命令
+		if(0 == Sccb_Write_Byte(0x42))//写地址
 		{	
-			stopSCCB();//发送SCCB 总线停止传输命令
+			Stop_Sccb();//发送SCCB 总线停止传输命令
 			return(0);//错误返回
 		}
 		// UART_Put_Inf("wr_Sensor_Reg:",1);
-		if(0==SCCBwriteByte(regID))//积存器ID
+		if(0 == Sccb_Write_Byte(regID))//积存器ID
 		{
-			stopSCCB();//发送SCCB 总线停止传输命令
+			Stop_Sccb();//发送SCCB 总线停止传输命令
 			return(0); //错误返回
 		}
 		// UART_Put_Inf("wr_Sensor_Reg:",2);
-		if(0==SCCBwriteByte(regDat))//写数据到积存器
+		if(0 == Sccb_Write_Byte(regDat))//写数据到积存器
 		{
-			stopSCCB();//发送SCCB 总线停止传输命令
+			Stop_Sccb();//发送SCCB 总线停止传输命令
 			return(0);//错误返回
 		}
-		stopSCCB();//发送SCCB 总线停止传输命令
+		Stop_Sccb();//发送SCCB 总线停止传输命令
 		// UART_Put_Inf("wr_Sensor_Reg:",3);
 		return(1);//成功返回
 }
 
-u8 rd_Sensor_Reg(u8 regID, u8 *regDat)//读OV7670寄存器
+static u8 Readd_Sensor_Reg(u8 regID, u8 *regDat)//读OV7670寄存器
 {
 		//通过写操作设置寄存器地址
-		startSCCB();
-		if(0==SCCBwriteByte(0x42))//写地址
+		Start_Sccb();
+		if(0 == Sccb_Write_Byte(0x42))//写地址
 		{
-			stopSCCB();//发送SCCB 总线停止传输命令
+			Stop_Sccb();//发送SCCB 总线停止传输命令
 			return(0);//错误返回
 		}
-		if(0==SCCBwriteByte(regID))//积存器ID
+		if(0 == Sccb_Write_Byte(regID))//积存器ID
 		{
-			stopSCCB();//发送SCCB 总线停止传输命令
+			Stop_Sccb();//发送SCCB 总线停止传输命令
 			return(0);//错误返回
 		}
-		stopSCCB();//发送SCCB 总线停止传输命令
+		Stop_Sccb();//发送SCCB 总线停止传输命令
 
 		//设置寄存器地址后，才是读
-		startSCCB();
-		if(0==SCCBwriteByte(0x43))//读地址
+		Start_Sccb();
+		if(0 == Sccb_Write_Byte(0x43))//读地址
 		{
-			stopSCCB();//发送SCCB 总线停止传输命令
+			Stop_Sccb();//发送SCCB 总线停止传输命令
 			return(0);//错误返回
 		}
-		*regDat=SCCBreadByte();//返回读到的值
-		noAck();//发送NACK命令
-		stopSCCB();//发送SCCB 总线停止传输命令
+		*regDat = Sccb_Read_Byte();//返回读到的值
+		No_Ack();//发送NACK命令
+		Stop_Sccb();//发送SCCB 总线停止传输命令
 		return(1);//成功返回
 }
-u8 Sensor_init(void)//摄像头芯片初始化
+u8 Sensor_Init(void)//摄像头芯片初始化
 {
 		u8 temp;	
-		u8 i=0;
+		u8 i = 0;
 
-		temp=0x80;
-		if(0==wr_Sensor_Reg(0x12,temp)) //Reset SCCB
+		temp = 0x80;
+		if(0 == Write_Sensor_Reg(0x12,temp)) //Reset SCCB
 		{
 			return 0 ;//错误返回
 		}							
 		//printf("Sensor_init:%d\n\r",1);
-		if(0==rd_Sensor_Reg(0x0b, &temp))//读ID
+		if(0 == Readd_Sensor_Reg(0x0b, &temp))//读ID
 		{
 			return 0 ;//错误返回
 		}									
 		//printf("Sensor_init:%d\n\r",temp);
-		if(temp==0x73)//OV7670
+		if(temp == 0x73)//OV7670
 		{																	
 			for(i=0;i<OV7670_REG_NUM;i++)
 			{
 				//printf("Sensor_init:cycle%d\n\r",i);
-				if(0==wr_Sensor_Reg(OV7670_reg[i][0],OV7670_reg[i][1]))
+				if(0 == Write_Sensor_Reg(OV7670_reg[i][0],OV7670_reg[i][1]))
 				{																															
 					return 0;//错误返回
 				}

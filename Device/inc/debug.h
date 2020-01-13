@@ -22,6 +22,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stdio.h"
+#include "stm32f10x.h"
 
 #ifdef LTK_RELEASE
 #define ltk_printf(format...)   ((void)0)

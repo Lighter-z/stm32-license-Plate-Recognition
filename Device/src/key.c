@@ -1,7 +1,7 @@
 #include "stm32f10x.h"
 #include "key.h"
 
-void Key_init(void)	//初始化 KEY1
+void Key_Init(void)	//初始化 KEY1
 {	
 	GPIO_InitTypeDef gpio_init_struct;//结构体
 

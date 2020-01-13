@@ -1,5 +1,6 @@
 #include "stm32f10x.h"
 #include "delay.h"
+
 void delay(u32 z)//ÑÓÊ±º¯Êýus
 {
 	u32 x,y;

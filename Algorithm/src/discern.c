@@ -45,7 +45,7 @@ void CameraScan(void) {                                               //摄像头扫
 			G = (color>>5)&0x3f;
 			B = color&0x1f;
 			
-			if((R > R_a) && (G >= G_a) && (B >= B_a)) {                             //二值化,高阈值：25.55.25，较合适阈值（21,47,21）
+			if((R > Red_Vlaue) && (G >= Green_Value) && (B >= Blue_Value)) {                             //二值化,高阈值：25.55.25，较合适阈值（21,47,21）
 				color = 0xffff;
 			} else {
 				color = 0x0000;
