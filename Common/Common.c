@@ -4,9 +4,7 @@
 
 
 
-static char *                 itoa                                ( int value, char * string, int radix );
-
-
+static char *itoa ( int value, char * string, int radix );
 
 /*
  * º¯ÊıÃû£ºUSART2_printf
